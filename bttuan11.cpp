@@ -1,28 +1,33 @@
 #include <iostream>
 using namespace std;
 
-// ================= NODE =================
+// ======================================================
+//                  PHAN 1: CAY MOC NOI
+// ======================================================
 
 struct Node {
+
     int data;
+
     Node* left;
     Node* right;
 };
 
-// ================= CREATE NODE =================
+// ================= TAO NODE =================
 
 Node* createNode(int x) {
 
     Node* p = new Node;
 
     p->data = x;
+
     p->left = NULL;
     p->right = NULL;
 
     return p;
 }
 
-// ================= CÂY Ð?Y Ð? =================
+// ================= CAY DAY DU =================
 
 Node* fullTree() {
 
@@ -48,7 +53,7 @@ Node* fullTree() {
     return root;
 }
 
-// ================= CÂY L?CH TRÁI =================
+// ================= CAY LECH TRAI =================
 
 Node* leftSkewedTree() {
 
@@ -63,12 +68,13 @@ Node* leftSkewedTree() {
     Node* root = createNode(1);
 
     root->left = createNode(2);
+
     root->left->left = createNode(3);
 
     return root;
 }
 
-// ================= CÂY L?CH PH?I =================
+// ================= CAY LECH PHAI =================
 
 Node* rightSkewedTree() {
 
@@ -83,12 +89,13 @@ Node* rightSkewedTree() {
     Node* root = createNode(1);
 
     root->right = createNode(2);
+
     root->right->right = createNode(3);
 
     return root;
 }
 
-// ================= CÂY ZIGZAG =================
+// ================= CAY ZIGZAG =================
 
 Node* zigzagTree() {
 
@@ -113,17 +120,22 @@ Node* zigzagTree() {
     return root;
 }
 
+// ======================================================
+//                     DUYET CAY
+// ======================================================
+
 // ================= PREORDER =================
 // Root -> Left -> Right
 
 void preorder(Node* root) {
 
-    if (root == NULL)
+    if(root == NULL)
         return;
 
     cout << root->data << " ";
 
     preorder(root->left);
+
     preorder(root->right);
 }
 
@@ -132,7 +144,7 @@ void preorder(Node* root) {
 
 void inorder(Node* root) {
 
-    if (root == NULL)
+    if(root == NULL)
         return;
 
     inorder(root->left);
@@ -147,25 +159,26 @@ void inorder(Node* root) {
 
 void postorder(Node* root) {
 
-    if (root == NULL)
+    if(root == NULL)
         return;
 
     postorder(root->left);
+
     postorder(root->right);
 
     cout << root->data << " ";
 }
 
-// ================= HÀM TEST =================
+// ================= TEST CAY =================
 
-void testTree(Node* root) {
+void testTraversal(Node* root) {
 
-    cout << "Preorder: ";
+    cout << "Preorder : ";
     preorder(root);
 
     cout << endl;
 
-    cout << "Inorder: ";
+    cout << "Inorder  : ";
     inorder(root);
 
     cout << endl;
@@ -176,39 +189,306 @@ void testTree(Node* root) {
     cout << endl;
 }
 
-// ================= MAIN =================
+// ======================================================
+//            PHAN 2: CAY LUU TRU TUAN TU
+// ======================================================
+
+class ArrayTree {
+
+private:
+
+    int tree[100];
+
+public:
+
+    ArrayTree() {
+
+        for(int i = 0; i < 100; i++) {
+
+            tree[i] = -1;
+        }
+    }
+
+    // ================= CAY DAY DU =================
+
+    void createFullTree() {
+
+        tree[0] = 1;
+
+        tree[1] = 2;
+        tree[2] = 3;
+
+        tree[3] = 4;
+        tree[4] = 5;
+        tree[5] = 6;
+        tree[6] = 7;
+    }
+
+    // ================= CAY LECH TRAI =================
+
+    void createLeftSkewedTree() {
+
+        tree[0] = 1;
+
+        tree[1] = 2;
+
+        tree[3] = 3;
+    }
+
+    // ================= CAY LECH PHAI =================
+
+    void createRightSkewedTree() {
+
+        tree[0] = 1;
+
+        tree[2] = 2;
+
+        tree[6] = 3;
+    }
+
+    // ================= CAY ZIGZAG =================
+
+    void createZigzagTree() {
+
+        tree[0] = 1;
+
+        tree[1] = 2;
+
+        tree[4] = 3;
+
+        tree[9] = 4;
+    }
+
+    // ================= HIEN THI =================
+
+    void display() {
+
+        for(int i = 0; i < 15; i++) {
+
+            if(tree[i] != -1) {
+
+                cout << "Index "
+                     << i
+                     << " : "
+                     << tree[i]
+                     << endl;
+            }
+        }
+    }
+};
+
+// ======================================================
+//                 PHAN 3: CAY BIEU THUC
+// ======================================================
+
+struct ExpNode {
+
+    char data;
+
+    ExpNode* left;
+    ExpNode* right;
+};
+
+// ================= TAO NODE =================
+
+ExpNode* createExpNode(char x) {
+
+    ExpNode* p = new ExpNode;
+
+    p->data = x;
+
+    p->left = NULL;
+    p->right = NULL;
+
+    return p;
+}
+
+// ================= TAO CAY BIEU THUC =================
+
+ExpNode* expressionTree() {
+
+    /*
+                *
+              /   \
+             +     -
+            / \   / \
+           a  b  c  d
+
+        (a+b)*(c-d)
+    */
+
+    ExpNode* root = createExpNode('*');
+
+    root->left = createExpNode('+');
+    root->right = createExpNode('-');
+
+    root->left->left = createExpNode('a');
+    root->left->right = createExpNode('b');
+
+    root->right->left = createExpNode('c');
+    root->right->right = createExpNode('d');
+
+    return root;
+}
+
+// ================= PREFIX =================
+
+void prefix(ExpNode* root) {
+
+    if(root == NULL)
+        return;
+
+    cout << root->data << " ";
+
+    prefix(root->left);
+
+    prefix(root->right);
+}
+
+// ================= INFIX =================
+
+void infix(ExpNode* root) {
+
+    if(root == NULL)
+        return;
+
+    if(root->left != NULL)
+        cout << "(";
+
+    infix(root->left);
+
+    cout << root->data;
+
+    infix(root->right);
+
+    if(root->right != NULL)
+        cout << ")";
+}
+
+// ================= POSTFIX =================
+
+void postfix(ExpNode* root) {
+
+    if(root == NULL)
+        return;
+
+    postfix(root->left);
+
+    postfix(root->right);
+
+    cout << root->data << " ";
+}
+
+// ======================================================
+//                         MAIN
+// ======================================================
 
 int main() {
 
-    cout << "===== FULL TREE =====" << endl;
+    // ==================================================
+    //                 CAY MOC NOI
+    // ==================================================
+
+    cout << "========== LINKED FULL TREE ==========" << endl;
 
     Node* full = fullTree();
 
-    testTree(full);
+    testTraversal(full);
 
     cout << endl;
 
-    cout << "===== LEFT SKEWED TREE =====" << endl;
+    cout << "====== LINKED LEFT SKEWED TREE ======" << endl;
 
-    Node* leftTree = leftSkewedTree();
+    Node* left = leftSkewedTree();
 
-    testTree(leftTree);
-
-    cout << endl;
-
-    cout << "===== RIGHT SKEWED TREE =====" << endl;
-
-    Node* rightTree = rightSkewedTree();
-
-    testTree(rightTree);
+    testTraversal(left);
 
     cout << endl;
 
-    cout << "===== ZIGZAG TREE =====" << endl;
+    cout << "===== LINKED RIGHT SKEWED TREE ======" << endl;
+
+    Node* right = rightSkewedTree();
+
+    testTraversal(right);
+
+    cout << endl;
+
+    cout << "========== LINKED ZIGZAG TREE =======" << endl;
 
     Node* zigzag = zigzagTree();
 
-    testTree(zigzag);
+    testTraversal(zigzag);
+
+    cout << endl;
+
+    // ==================================================
+    //                 CAY TUAN TU
+    // ==================================================
+
+    cout << "========== ARRAY FULL TREE ==========" << endl;
+
+    ArrayTree arrFull;
+
+    arrFull.createFullTree();
+
+    arrFull.display();
+
+    cout << endl;
+
+    cout << "====== ARRAY LEFT SKEWED TREE ======" << endl;
+
+    ArrayTree arrLeft;
+
+    arrLeft.createLeftSkewedTree();
+
+    arrLeft.display();
+
+    cout << endl;
+
+    cout << "===== ARRAY RIGHT SKEWED TREE ======" << endl;
+
+    ArrayTree arrRight;
+
+    arrRight.createRightSkewedTree();
+
+    arrRight.display();
+
+    cout << endl;
+
+    cout << "========== ARRAY ZIGZAG TREE =======" << endl;
+
+    ArrayTree arrZigzag;
+
+    arrZigzag.createZigzagTree();
+
+    arrZigzag.display();
+
+    cout << endl;
+
+    // ==================================================
+    //                 CAY BIEU THUC
+    // ==================================================
+
+    cout << "========== EXPRESSION TREE ==========" << endl;
+
+    ExpNode* expRoot = expressionTree();
+
+    cout << "Prefix : ";
+    prefix(expRoot);
+
+    cout << endl;
+
+    cout << "Infix  : ";
+    infix(expRoot);
+
+    cout << endl;
+
+    cout << endl;
+
+    cout << "Postfix: ";
+    postfix(expRoot);
+
+    cout << endl;
 
     return 0;
 }
