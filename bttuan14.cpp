@@ -1,70 +1,74 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#include <iostream>
+#include <cmath>
 #include <windows.h>
-#include <math.h>
 
-typedef struct Node {
+using namespace std;
+
+struct Node {
     int data;
-    struct Node* left;
-    struct Node* right;
-}Node;
+    Node* left;
+    Node* right;
 
-Node* Create_Node(int data) {
-    Node* n = (Node*)malloc(sizeof(Node));
-    n->data = data;
-    n->left = NULL;
-    n->right = NULL;
-    return n;
-}
+    Node(int value) {
+        data=value;
+        left=nullptr;
+        right=nullptr;
+    }
+};
 
-typedef struct {
+struct Tree {
     Node* root;
-}Tree;
 
-void Insert_Recursive(Node** current_node, int data) {
-    if((*current_node) == NULL) {
-        (*current_node) = Create_Node(data);
+    Tree(){
+        root=nullptr;
+    }
+};
+
+void Insert_Recursive(Node*& current_node, int data) {
+    if (current_node==nullptr) {
+        current_node=new Node(data);
         return;
     }
-    else {
-        if(data < (*current_node)->data) {
-            if((*current_node)->left == NULL) {
-                (*current_node)->left = Create_Node(data);
-                return;
-            }
-            else {
-                Insert_Recursive(&(*current_node)->left, data);
-            }
+
+    if (data<current_node->data) {
+        if (current_node->left==nullptr) {
+            current_node->left=new Node(data);
+            return;
         }
-        
-        else {
-            if((*current_node)->right == NULL) {
-                (*current_node)->right = Create_Node(data);
-                return;
-            }
-            else {
-                Insert_Recursive(&(*current_node)->right, data);
-            }
+        else{
+            Insert_Recursive(current_node->left, data);
         }
     }
+    else{
+        if(current_node->right==nullptr) {
+            current_node->right=new Node(data);
+            return;
+        }
+        else{
+            Insert_Recursive(current_node->right, data);
+        }
+    }
+}
+
+void Insert(Tree& t,int data) {
+    Insert_Recursive(t.root,data);
 }
 
 int Get_Height(Node* current_node) {
-    if(current_node == NULL) return 0;
+    if (current_node== nullptr)
+        return 0;
 
-    int left_height = Get_Height(current_node->left);
-    int right_height = Get_Height(current_node->right);
+    int left_height=Get_Height(current_node->left);
+    int right_height=Get_Height(current_node->right);
 
-    return 1 + ((left_height > right_height) ? left_height : right_height);
+    return 1 + max(left_height, right_height);
 }
 
 int Calculate_Balance_Factor(Node* t) {
     int count_left = Get_Height(t->left);
     int count_right = Get_Height(t->right);
 
-    return (count_left - count_right);
+    return count_left - count_right;
 }
 
 Node* Right_Rotate(Node* y) {
@@ -87,38 +91,63 @@ Node* Left_Rotate(Node* y) {
     return x;
 }
 
-Node* Balance_Tree(Node** current_node) {
-    int balance = Calculate_Balance_Factor(*current_node);
+Node* Balance_Tree(Node*& current_node) {
+    int balance = Calculate_Balance_Factor(current_node);
 
-    if(abs(balance) <= 1) {
-        return (*current_node);
+    if (abs(balance) <= 1) {
+        return current_node;
     }
-    else if(balance < -1) {
-        int right_balance = Calculate_Balance_Factor((*current_node)->right);
+    else if (balance < -1) {
+        int right_balance =
+            Calculate_Balance_Factor(current_node->right);
 
-        if(right_balance <= 0) {
-            return Left_Rotate((*current_node));
+        if (right_balance <= 0) {
+            return Left_Rotate(current_node);
         }
         else {
-            (*current_node)->right = Right_Rotate((*current_node)->right);
-            return Left_Rotate((*current_node));
-            }
+            current_node->right =
+                Right_Rotate(current_node->right);
+            return Left_Rotate(current_node);
+        }
     }
-    else if(balance > 1) {
-        int left_balance = Calculate_Balance_Factor((*current_node)->left);
+    else {
+        int left_balance =
+            Calculate_Balance_Factor(current_node->left);
 
-        if(left_balance > 0) {
-            return Right_Rotate((*current_node));
+        if (left_balance > 0) {
+            return Right_Rotate(current_node);
         }
         else {
-            (*current_node)->left = Left_Rotate((*current_node)->left);
-            return Right_Rotate((*current_node));
+            current_node->left =
+                Left_Rotate(current_node->left);
+            return Right_Rotate(current_node);
         }
     }
-
-    return (*current_node);
 }
 
-int main(){
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
 
-} 
+    Tree t;
+
+    int a[]={32, 51, 27, 83, 96, 11, 45, 75, 66};
+
+    for(int i = 0;i < 9; i++) {
+        Insert(t,a[i]);
+    }
+
+    int check=Calculate_Balance_Factor(t.root);
+    cout <<"He so can bang truoc khi xoay: "
+         << check << endl;
+
+    Tree new_t;
+    new_t.root=Balance_Tree(t.root);
+
+    int check_after=
+        Calculate_Balance_Factor(new_t.root);
+
+    cout << "He so can bang sau khi xoay: "
+         << check_after << endl;
+
+    return 0;
+}
