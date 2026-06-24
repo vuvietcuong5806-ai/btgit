@@ -1,37 +1,27 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <unordered_map>
-#include <queue>
-#include <algorithm>
-
 using namespace std;
 
-const int INF = 1e9;
+struct Node
+{
+    int data;
+    Node *next;
+};
 
-class Graph {
-private:
-    vector<string> names;
-    unordered_map<string, int> nodeId;
-    vector<vector<pair<int, int>>> adj;
+Node *ds[11];
 
-public:
-    int getOrAddNode(const string& name) {
-        if (nodeId.count(name))
-            return nodeId[name];
+string ten[11] =
+{
+    "Ha Noi",
+    "Thai Nguyen",
+    "Bac Ninh",
+    "Bac Giang",
+    "Uong Bi",
+    "Hai Phong",
+    "Hai Duong",
+    "Hung Yen",
+    "Phu Ly",
+    "Hoa Binh",
+    "Son Tay"
+};
 
-        int id = names.size();
-        nodeId[name] = id;
-        names.push_back(name);
-        adj.push_back(vector<pair<int, int>>());
 
-        return id;
-    }
-
-    void addEdge(const string& src, const string& dest, int weight) {
-        int u = getOrAddNode(src);
-        int v = getOrAddNode(dest);
-
-        adj[u].push_back({v, weight});
-        adj[v].push_back({u, weight}); 
-    }
