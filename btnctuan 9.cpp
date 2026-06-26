@@ -1,13 +1,12 @@
 #include <iostream>
 using namespace std;
 
-// ===== NODE =====
+
 struct Node {
     int data;
     Node* next;
 };
 
-// ===== TAO NODE =====
 Node* createNode(int x) {
     Node* p = new Node;
     p->data = x;
@@ -15,7 +14,6 @@ Node* createNode(int x) {
     return p;
 }
 
-// ===== TAO DSLK VONG =====
 Node* createCircle(int N) {
     Node *head = createNode(1);
     Node *p = head;
@@ -25,39 +23,38 @@ Node* createCircle(int N) {
         p = p->next;
     }
 
-    p->next = head; // n?i vòng
+    p->next = head; 
     return head;
 }
 
-// ===== JOSEPHUS =====
-int josephus(int N, int M) {
-    if (N == 1) return 1;
+
+int josephus(int N,int M) {
+    if (N==1) return 1;
 
     Node* p = createCircle(N);
     Node* prev = NULL;
 
-    while (p->next != p) { // còn hon 1 ngu?i
-        // di chuy?n M bu?c
+    while (p->next != p) { 
         for (int i = 0; i < M; i++) {
             prev = p;
             p = p->next;
         }
 
-        // loai nguoi p
+        // loai ng b  
         cout << "Loai: " << p->data << endl;
 
         prev->next = p->next;
         delete p;
 
-        p = prev->next; // sang ngu?i ti?p theo
+        p = prev->next; 
     }
 
-    int winner = p->data;
+    int nguoithang = p->data;
     delete p;
-    return winner;
+    return nguoithang;
 }
 
-// ===== MAIN =====
+
 int main() {
     int N, M;
     cout << "Nhap N: ";
@@ -66,7 +63,7 @@ int main() {
     cin >> M;
 
     int winner = josephus(N, M);
-    cout << "Nguoi chien thang: " << winner << endl;
+    cout << "Nguoi chien thang: " << nguoithang << endl;
 
     return 0;
 }
