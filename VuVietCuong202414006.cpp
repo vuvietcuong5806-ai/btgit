@@ -25,4 +25,28 @@ Node* createNode(File x) {
     return p;
 }
 
+void insert(Node *&head, File x) {
+    Node *newnode = createNode(x);
+
+    if (head == NULL) {
+        head = newnode;
+        return;
+    }
+
+    if (x.time < head->data.time) {
+        newnode->next = head;
+        head = newnode;
+        return;
+    }
+
+    Node *p = head;
+
+    while (p->next != NULL && p->next->data.time < x.time) {
+        p = p->next;
+    }
+
+    newnode->next = p->next;
+    p->next = newnode;
+}  
+
 
